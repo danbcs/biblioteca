@@ -32,35 +32,6 @@ bool bancodedados::isOpen() const
     return m_db.isOpen();
 }
 
-
-bool bancodedados::execute(QString str){
-    QSqlQuery query;
-    qDebug() << str;
-    query.prepare(str);
-
-    if(!query.exec())
-        return false;
-return true;
-}
-
-QString bancodedados::executeReturn(QString str){
-    QSqlQuery query;
-    qDebug() << str;
-    query.prepare(str);
-
-    if(query.exec())
-    {
-        if(query.next())
-        {
-            QStringList list;
-            list << query.value("ISBN").toString() << query.value("nome").toString() << query.value("autor").toString() << query.value("categoria").toString();
-            return list.join('*');
-        }
-    }
-    return "0";
-
-}
-/*
 bool bancodedados::addBook(const livro& livro)
 {
     bool success = false;
@@ -156,7 +127,6 @@ bool bancodedados::bookExists(const QString& isbn) const
     return exists;
 }
 
-/*
 livro bancodedados::returnBook(const QString& campo, const QString& valor){
 
     livro aux_livro;
@@ -193,7 +163,6 @@ livro bancodedados::returnBook(const QString& campo, const QString& valor){
     return aux_livro;
 }
 
-*/
 //para testes
 bool bancodedados::removeAllBooks()
 {
