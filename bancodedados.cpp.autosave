@@ -1,0 +1,91 @@
+#include "bancodedados.h"
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlRecord>
+#include <QDebug>
+
+bancodedados::bancodedados(const QString &path)
+{
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(path);
+
+    if (!m_db.open())
+    {
+        qDebug() << "Error: connection with database fail";
+    }
+    else
+    {
+        qDebug() << "Database: connection ok";
+    }
+}
+
+bancodedados::~bancodedados()
+{
+    if (m_db.isOpen())
+    {
+        m_db.close();
+    }
+}
+
+bool bancodedados::isOpen() const
+{
+    return m_db.isOpen();
+}
+
+
+bool bancodedados::execute(QString str){
+    QSqlQuery query;
+    qDebug() << str;
+    query.prepare(str);
+
+    if(!query.exec())
+        return false;
+return true;
+}
+
+QString bancodedados::executeReturn(QString str){
+    QSqlQuery query;
+    qDebug() << str;
+    query.prepare(str);
+
+    if(query.exec())
+    {
+        if(query.next())
+        {
+            QStringList list;
+            list << query.value("ISBN").toString() << query.value("nome").toString() << query.value("autor").toString() << query.value("categoria").toString();
+            return list.join('*');
+        }
+    }
+    return "0";
+
+}
+
+//para testes
+bool bancodedados::removeAllBooks()
+{
+    bool success = false;
+
+    QSqlQuery removeQuery;
+    removeQuery.prepare("DELETE FROM livro");
+
+    if (removeQuery.exec())
+    {
+        success = true;
+    }
+    else
+    {
+        qDebug() << "foram removidos: " << removeQuery.lastError();
+    }
+
+    return success;
+}
+
+void bancodedados::close() {
+
+    if (m_db.isOpen())
+    {
+        m_db.close();
+    }
+}
+

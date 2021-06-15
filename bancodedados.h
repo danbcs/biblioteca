@@ -2,7 +2,6 @@
 #define BANCODEDADOS_H
 
 #include <QSqlDatabase>
-#include <livro.h>
 
 class bancodedados
 {
@@ -24,17 +23,9 @@ public:
 
     bool isOpen() const;
 
-    bool addBook(const livro& livro);
+    bool execute(QString);
 
-    bool removeBook(const QString& isbn);
-
-     bool updateBook(const livro& livro);
-
-     livro returnBook(const QString& campo, const QString& valor);
-
-     bool bookExists(const QString& isbn) const;
-
-     void printAllBooks() const;
+    QString executeReturn(QString str);
 
     bool removeAllBooks();
 
